@@ -3,34 +3,37 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-  <meta name="theme-color" content="#111827" />
+  <meta name="theme-color" content="#101827" />
+  <meta name="color-scheme" content="dark light" />
+  <title>Календарик стукача</title>
+
   <link rel="manifest" href="./manifest.webmanifest" />
   <link rel="icon" type="image/svg+xml" href="./icons/favicon.svg" />
-  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="./icons/favicon-16.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./icons/favicon-32.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="./icons/apple-touch-icon.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-title" content="Календарик" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="application-name" content="Календарик стукача" />
-  <meta name="msapplication-TileColor" content="#111827" />
+  <meta name="msapplication-TileColor" content="#101827" />
   <meta name="msapplication-TileImage" content="./icons/mstile-150.png" />
-  <title>Календарик стукача</title>
+
   <style>
     :root{
       --bg:#0b1020;
       --bg2:#121936;
-      --card:rgba(255,255,255,.09);
-      --card2:rgba(255,255,255,.13);
+      --surface:rgba(255,255,255,.095);
+      --surface-2:rgba(255,255,255,.14);
       --line:rgba(255,255,255,.16);
       --text:#f8fafc;
       --muted:#aeb9cf;
+      --accent:#8b5cf6;
+      --accent-2:#06b6d4;
       --good:#34d399;
       --warn:#fbbf24;
       --bad:#fb7185;
-      --accent:#8b5cf6;
-      --accent2:#06b6d4;
-      --shadow:0 24px 70px rgba(0,0,0,.35);
+      --shadow:0 24px 75px rgba(0,0,0,.36);
       --radius:24px;
     }
     *{box-sizing:border-box}
@@ -38,168 +41,81 @@
     body{
       margin:0;
       min-height:100svh;
-      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       color:var(--text);
+      font-family:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
       background:
-        radial-gradient(circle at 14% 10%, rgba(139,92,246,.45), transparent 32rem),
-        radial-gradient(circle at 92% 18%, rgba(6,182,212,.36), transparent 30rem),
-        radial-gradient(circle at 65% 95%, rgba(251,113,133,.20), transparent 34rem),
+        radial-gradient(circle at 15% 8%, rgba(139,92,246,.44), transparent 32rem),
+        radial-gradient(circle at 92% 16%, rgba(6,182,212,.34), transparent 30rem),
+        radial-gradient(circle at 60% 95%, rgba(251,113,133,.18), transparent 34rem),
         linear-gradient(135deg,var(--bg),var(--bg2));
       background-attachment:fixed;
     }
+    body.light{
+      --bg:#eef4ff;--bg2:#dbeafe;--surface:rgba(255,255,255,.72);--surface-2:rgba(255,255,255,.88);
+      --line:rgba(15,23,42,.13);--text:#0f172a;--muted:#536174;--shadow:0 24px 75px rgba(15,23,42,.16);
+    }
+    body.office{
+      --bg:#061a13;--bg2:#15220b;--accent:#16a34a;--accent-2:#f59e0b;--good:#86efac;--warn:#fde68a;--bad:#fda4af;
+    }
     button,input,select,textarea{font:inherit}
     button{cursor:pointer}
-    .page{width:min(1440px,100%);margin:0 auto;padding:24px clamp(14px,2.4vw,34px) 42px}
-    .hero{
-      display:grid;
-      grid-template-columns:1.2fr .8fr;
-      gap:18px;
-      align-items:stretch;
-      margin-bottom:18px;
-    }
+    .page{width:min(1460px,100%);margin:0 auto;padding:24px clamp(12px,2.4vw,34px) 42px}
     .glass{
       border:1px solid var(--line);
-      background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.06));
+      background:linear-gradient(180deg,var(--surface-2),var(--surface));
       box-shadow:var(--shadow);
       backdrop-filter:blur(20px) saturate(145%);
       -webkit-backdrop-filter:blur(20px) saturate(145%);
       border-radius:var(--radius);
     }
-    .title-card{padding:28px;position:relative;overflow:hidden}
-    .title-card:after{
-      content:"";
-      position:absolute;inset:auto -10% -55% 35%;height:220px;
-      background:radial-gradient(circle, rgba(255,255,255,.22), transparent 66%);
-      transform:rotate(-10deg);
-      pointer-events:none;
-    }
-    h1{font-size:clamp(34px,5vw,68px);line-height:.95;margin:0 0 12px;letter-spacing:-.055em}
-    .subtitle{font-size:clamp(15px,1.6vw,19px);line-height:1.55;color:var(--muted);max-width:880px;margin:0}
-    .employee{margin-top:22px;display:flex;gap:10px;flex-wrap:wrap;align-items:center}
-    .pill{
-      display:inline-flex;align-items:center;gap:8px;
-      padding:9px 13px;border:1px solid var(--line);border-radius:999px;
-      background:rgba(255,255,255,.08);color:#eef2ff;font-weight:700;font-size:14px
-    }
+    .hero{display:grid;grid-template-columns:1.15fr .85fr;gap:18px;margin-bottom:18px;align-items:stretch}
+    .title-card{padding:28px;overflow:hidden;position:relative}
+    .title-card:after{content:"";position:absolute;right:-8%;bottom:-64%;width:560px;height:330px;background:radial-gradient(circle,rgba(255,255,255,.21),transparent 66%);pointer-events:none;transform:rotate(-11deg)}
+    h1{font-size:clamp(34px,5vw,68px);line-height:.95;margin:0;letter-spacing:-.055em}
+    .employee{display:flex;flex-wrap:wrap;gap:10px;margin-top:22px}
+    .pill{display:inline-flex;gap:8px;align-items:center;border:1px solid var(--line);border-radius:999px;background:rgba(255,255,255,.085);padding:9px 13px;font-size:14px;font-weight:800;color:var(--text)}
     .status-card{padding:22px;display:grid;gap:14px;align-content:space-between}
-    .today-box{display:grid;gap:7px}
-    .label{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:800}
-    .today-date{font-size:28px;font-weight:900;letter-spacing:-.03em}
-    .worktime{font-size:15px;color:var(--muted);line-height:1.4}
-    .quick-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
-    .stat{padding:14px;border-radius:18px;border:1px solid var(--line);background:rgba(0,0,0,.18)}
-    .stat b{display:block;font-size:24px;letter-spacing:-.04em}
-    .stat span{display:block;margin-top:3px;color:var(--muted);font-size:12px;line-height:1.25}
-    .layout{display:grid;grid-template-columns:minmax(310px,.95fr) minmax(360px,1.05fr);gap:18px;align-items:start}
+    .label{font-size:12px;text-transform:uppercase;letter-spacing:.14em;color:var(--muted);font-weight:900}
+    .today-date{font-size:28px;font-weight:950;letter-spacing:-.04em;margin-top:7px}
+    .worktime{font-size:15px;color:var(--muted);line-height:1.45;margin-top:5px}
+    .quick-stats,.summary-card{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+    .stat{border:1px solid var(--line);background:rgba(0,0,0,.17);padding:14px;border-radius:18px;min-width:0}
+    body.light .stat{background:rgba(255,255,255,.6)}
+    .stat b{display:block;font-size:24px;letter-spacing:-.04em;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .stat span{display:block;margin-top:4px;color:var(--muted);font-size:12px;line-height:1.25}
+    .layout{display:grid;grid-template-columns:minmax(315px,.92fr) minmax(390px,1.08fr);gap:18px;align-items:start}
     .panel{padding:20px}
     .panel-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:16px}
     .panel-title{margin:0;font-size:23px;letter-spacing:-.035em}
-    .month-nav{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+    .month-nav,.tools,.theme-switch{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
     .btn{
-      border:1px solid var(--line);background:rgba(255,255,255,.10);color:var(--text);
-      border-radius:15px;padding:10px 13px;font-weight:800;transition:.18s transform,.18s background,.18s border-color;
-      min-height:42px;
+      border:1px solid var(--line);background:rgba(255,255,255,.10);color:var(--text);border-radius:15px;
+      padding:10px 13px;min-height:42px;font-weight:850;transition:.18s transform,.18s background,.18s border-color;
     }
-    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.26)}
-    .btn.primary{background:linear-gradient(135deg,var(--accent),var(--accent2));border-color:transparent;color:white}
-    .btn.danger{background:rgba(251,113,133,.14);border-color:rgba(251,113,133,.35);color:#fecdd3}
-    .btn.good{background:rgba(52,211,153,.14);border-color:rgba(52,211,153,.35);color:#bbf7d0}
+    .btn:hover{transform:translateY(-1px);background:rgba(255,255,255,.16);border-color:rgba(255,255,255,.28)}
+    .btn.primary{border-color:transparent;background:linear-gradient(135deg,var(--accent),var(--accent-2));color:#fff}
+    .btn.danger{background:rgba(251,113,133,.14);border-color:rgba(251,113,133,.38);color:#fecdd3}
+    .btn.good{background:rgba(52,211,153,.14);border-color:rgba(52,211,153,.38);color:#bbf7d0}
     .calendar-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:8px}
-    .dow{padding:8px 2px;text-align:center;color:var(--muted);font-size:12px;font-weight:900;text-transform:uppercase;letter-spacing:.06em}
-    .day{
-      min-height:88px;border:1px solid var(--line);background:rgba(255,255,255,.07);border-radius:18px;padding:10px;
-      display:flex;flex-direction:column;gap:8px;text-align:left;color:var(--text);position:relative;overflow:hidden;
-    }
-    .day:hover{background:rgba(255,255,255,.12)}
-    .day.off{opacity:.55;background:rgba(0,0,0,.13)}
-    .day.other{opacity:.38}
-    .day.selected{outline:2px solid rgba(139,92,246,.95);background:rgba(139,92,246,.17)}
-    .day.today:before{content:"Сегодня";position:absolute;right:7px;top:7px;font-size:10px;color:#dbeafe;background:rgba(59,130,246,.24);border:1px solid rgba(147,197,253,.25);border-radius:999px;padding:3px 6px}
-    .day-num{font-weight:900;font-size:18px;letter-spacing:-.02em}
-    .day-meta{margin-top:auto;display:grid;gap:5px;color:var(--muted);font-size:11px}
-    .dotline{height:6px;border-radius:99px;background:rgba(255,255,255,.11);overflow:hidden}
-    .dotfill{height:100%;width:0;background:linear-gradient(90deg,var(--good),var(--warn),var(--bad));border-radius:99px}
-    .form-grid{display:grid;gap:13px}
-    .field{display:grid;gap:7px}
-    .field span{font-weight:850;font-size:13px;color:#e5e7eb}
-    input,select,textarea{
-      width:100%;min-height:46px;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.22);color:var(--text);
-      padding:11px 13px;outline:none;
-    }
-    input:focus,select:focus,textarea:focus{border-color:rgba(139,92,246,.8);box-shadow:0 0 0 4px rgba(139,92,246,.16)}
-    select option{background:#111827;color:#fff}
-    textarea{resize:vertical;min-height:84px}
-    .time-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}
-    .time-control{display:grid;grid-template-columns:42px 1fr 42px;gap:8px;align-items:center}
-    .mini{padding:0;border-radius:14px;min-height:42px;display:grid;place-items:center}
-    .hint-line{font-size:12px;color:var(--muted);line-height:1.4}
-    .summary-card{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:12px 0 14px}
-    .summary-card .stat{background:rgba(255,255,255,.07)}
-    .entries{display:grid;gap:10px;margin-top:14px}
-    .entry{
-      border:1px solid var(--line);border-radius:18px;padding:13px;background:rgba(255,255,255,.075);
-      display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start;
-    }
-    .entry-main{display:grid;gap:6px;min-width:0}
-    .entry-title{font-weight:900;line-height:1.25}
-    .entry-meta{font-size:13px;color:var(--muted);line-height:1.35}
-    .entry-actions{display:flex;gap:7px;align-items:center}
-    .icon-btn{
-      width:38px;height:38px;border-radius:13px;border:1px solid var(--line);background:rgba(0,0,0,.17);color:var(--text);font-weight:900;
-    }
-    .empty{border:1px dashed rgba(255,255,255,.22);border-radius:18px;padding:18px;color:var(--muted);text-align:center;background:rgba(255,255,255,.04)}
-    .tools{display:flex;gap:9px;flex-wrap:wrap;margin-top:14px}
-    .notice{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.45}
-    .toast{
-      position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(30px);opacity:0;pointer-events:none;
-      background:rgba(15,23,42,.92);border:1px solid rgba(255,255,255,.18);box-shadow:0 20px 50px rgba(0,0,0,.35);
-      border-radius:16px;padding:12px 15px;color:#fff;font-weight:800;z-index:20;transition:.22s ease;
-    }
-    .toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
-    .modal{position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;place-items:center;padding:18px;z-index:30}
-    .modal.show{display:grid}
-    .modal-card{width:min(680px,100%);padding:20px}
-    .modal-card h3{margin:0 0 10px;font-size:24px}
-    .modal-card p{color:var(--muted);line-height:1.5;margin:0 0 14px}
-    .modal textarea{min-height:200px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
-    .theme-switch{display:flex;gap:8px;flex-wrap:wrap}
-    .theme-dot{width:38px;height:38px;border-radius:13px;border:1px solid var(--line)}
-    .theme-dot.dark{background:linear-gradient(135deg,#111827,#4c1d95)}
-    .theme-dot.light{background:linear-gradient(135deg,#f8fafc,#bae6fd)}
-    .theme-dot.office{background:linear-gradient(135deg,#052e16,#f59e0b)}
-    body.light{
-      --bg:#edf2fb;--bg2:#dbeafe;--card:rgba(255,255,255,.72);--card2:rgba(255,255,255,.88);--line:rgba(15,23,42,.12);
-      --text:#0f172a;--muted:#526175;--shadow:0 24px 70px rgba(15,23,42,.15);
-    }
-    body.light input,body.light select,body.light textarea{background:rgba(255,255,255,.68);color:#0f172a}
-    body.light select option{background:white;color:#0f172a}
-    body.office{
-      --bg:#081c15;--bg2:#18392b;--accent:#f59e0b;--accent2:#22c55e;--muted:#cbd5c7;
-    }
-    @media (max-width:980px){
-      .hero,.layout{grid-template-columns:1fr}
-      .status-card{grid-template-columns:1fr}
-      .quick-stats{grid-template-columns:repeat(3,1fr)}
-    }
-    @media (max-width:640px){
-      .page{padding:14px 10px 28px}
-      .title-card,.panel,.status-card{padding:16px;border-radius:20px}
-      .calendar-grid{gap:5px}
-      .day{min-height:70px;border-radius:14px;padding:7px}
-      .day.today:before{display:none}
-      .day-num{font-size:16px}
-      .day-meta{font-size:10px}
-      .time-row,.summary-card,.quick-stats{grid-template-columns:1fr}
-      .entry{grid-template-columns:1fr}
-      .entry-actions{justify-content:flex-end}
-      .panel-head{align-items:flex-start;flex-direction:column}
-      .month-nav{width:100%}
-      .month-nav .btn{flex:1}
-    }
-    @media print{
-      body{background:#fff;color:#000}.glass{box-shadow:none;background:#fff;border:1px solid #ccc}.tools,.btn,.theme-switch,.modal,.toast{display:none!important}
-      .layout,.hero{display:block}.panel,.status-card,.title-card{margin-bottom:12px}.entry{break-inside:avoid}
-    }
+    .dow{text-align:center;color:var(--muted);font-size:12px;font-weight:950;text-transform:uppercase;letter-spacing:.06em;padding:8px 2px}
+    .day{min-height:90px;border:1px solid var(--line);background:rgba(255,255,255,.072);border-radius:18px;padding:10px;color:var(--text);text-align:left;display:flex;flex-direction:column;gap:8px;position:relative;overflow:hidden}
+    .day:hover{background:rgba(255,255,255,.125)}
+    .day.other{opacity:.38}.day.off{opacity:.55;background:rgba(0,0,0,.14)}
+    .day.selected{outline:2px solid rgba(139,92,246,.95);background:rgba(139,92,246,.18)}
+    .day.today:before{content:"Сегодня";position:absolute;right:7px;top:7px;font-size:10px;color:#dbeafe;background:rgba(59,130,246,.26);border:1px solid rgba(147,197,253,.26);border-radius:999px;padding:3px 6px}
+    .day-num{font-size:18px;font-weight:950;letter-spacing:-.02em}.day-meta{margin-top:auto;display:grid;gap:5px;color:var(--muted);font-size:11px}.dotline{height:6px;border-radius:99px;background:rgba(255,255,255,.12);overflow:hidden}.dotfill{height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,var(--good),var(--warn),var(--bad))}
+    .form-grid{display:grid;gap:13px}.field{display:grid;gap:7px}.field span{font-weight:900;font-size:13px;color:var(--text)}
+    input,select,textarea{width:100%;min-height:46px;border:1px solid var(--line);border-radius:16px;background:rgba(0,0,0,.22);color:var(--text);padding:11px 13px;outline:none}
+    body.light input,body.light select,body.light textarea{background:rgba(255,255,255,.72)}
+    input:focus,select:focus,textarea:focus{border-color:rgba(139,92,246,.85);box-shadow:0 0 0 4px rgba(139,92,246,.16)}
+    select option{background:#111827;color:#fff} textarea{resize:vertical;min-height:84px}.time-row{display:grid;grid-template-columns:1fr 1fr;gap:10px}.time-control{display:grid;grid-template-columns:42px 1fr 42px;gap:8px;align-items:center}.mini{padding:0;border-radius:14px;min-height:42px;display:grid;place-items:center}.hint-line{font-size:12px;color:var(--muted);line-height:1.45}.summary-card{margin:12px 0 16px}.summary-card .stat{background:rgba(255,255,255,.065)}
+    .entries{display:grid;gap:10px;margin-top:14px}.entry{border:1px solid var(--line);border-radius:18px;background:rgba(255,255,255,.075);padding:13px;display:grid;grid-template-columns:1fr auto;gap:12px;align-items:start}.entry-main{display:grid;gap:6px;min-width:0}.entry-title{font-weight:950;line-height:1.25}.entry-meta{font-size:13px;color:var(--muted);line-height:1.35}.entry-actions{display:flex;gap:7px}.icon-btn{width:38px;height:38px;border-radius:13px;border:1px solid var(--line);background:rgba(0,0,0,.17);color:var(--text);font-weight:950}.empty{border:1px dashed rgba(255,255,255,.24);border-radius:18px;padding:18px;color:var(--muted);text-align:center;background:rgba(255,255,255,.04)}
+    .notice{margin-top:14px;color:var(--muted);font-size:12px;line-height:1.45}.month-list{margin-top:16px;display:grid;gap:10px}.month-list h3{margin:0;font-size:18px}.month-table{width:100%;border-collapse:separate;border-spacing:0 8px}.month-table th{font-size:12px;color:var(--muted);text-align:left;font-weight:950}.month-table td{font-size:13px;padding:10px 8px;background:rgba(255,255,255,.06);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}.month-table td:first-child{border-left:1px solid var(--line);border-radius:14px 0 0 14px}.month-table td:last-child{border-right:1px solid var(--line);border-radius:0 14px 14px 0}.theme-dot{width:38px;height:38px;border-radius:13px;border:1px solid var(--line)}.theme-dot.dark{background:linear-gradient(135deg,#111827,#4c1d95)}.theme-dot.light{background:linear-gradient(135deg,#f8fafc,#bae6fd)}.theme-dot.office{background:linear-gradient(135deg,#052e16,#f59e0b)}
+    .toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%) translateY(30px);opacity:0;pointer-events:none;background:rgba(15,23,42,.94);border:1px solid rgba(255,255,255,.2);box-shadow:0 20px 55px rgba(0,0,0,.36);border-radius:16px;padding:12px 15px;color:#fff;font-weight:900;z-index:20;transition:.22s ease;max-width:min(92vw,620px);text-align:center}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.58);display:none;place-items:center;padding:18px;z-index:30}.modal.show{display:grid}.modal-card{width:min(720px,100%);padding:20px}.modal-card h3{margin:0 0 10px;font-size:24px}.modal-card p{color:var(--muted);line-height:1.5;margin:0 0 14px}.modal textarea{min-height:220px;font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12px}
+    @media(max-width:980px){.hero,.layout{grid-template-columns:1fr}.page{padding-top:14px}.quick-stats,.summary-card{grid-template-columns:repeat(3,1fr)}}
+    @media(max-width:620px){.page{padding:12px 10px 28px}.title-card,.panel,.status-card{padding:16px;border-radius:20px}h1{font-size:38px}.calendar-grid{gap:5px}.day{min-height:70px;border-radius:14px;padding:7px}.day-num{font-size:16px}.day-meta{font-size:10px}.time-row,.quick-stats,.summary-card{grid-template-columns:1fr}.entry{grid-template-columns:1fr}.entry-actions{justify-content:flex-end}.panel-head{align-items:flex-start;flex-direction:column}.month-nav{width:100%}.month-nav .btn{flex:1}.month-table{font-size:12px}.month-table th:nth-child(5),.month-table td:nth-child(5){display:none}}
+    @media print{body{background:#fff;color:#000}.glass{box-shadow:none;background:#fff;border:1px solid #ccc}.tools,.btn,.theme-switch,.modal,.toast{display:none!important}.layout,.hero{display:block}.panel,.status-card,.title-card{margin-bottom:12px}.entry{break-inside:avoid}}
   </style>
 </head>
 <body>
@@ -210,11 +126,11 @@
         <div class="employee">
           <span class="pill">👤 Яковлев Илья Владимирович</span>
           <span class="pill">🗓️ 6 рабочих дней в неделю</span>
-          <span class="pill">💾 Локальное хранение</span>
+          <span class="pill">⏱️ Точность до минуты</span>
         </div>
       </div>
       <aside class="status-card glass">
-        <div class="today-box">
+        <div>
           <div class="label">Выбранный день</div>
           <div class="today-date" id="selectedDateTitle">—</div>
           <div class="worktime" id="worktimeTitle">—</div>
@@ -244,7 +160,8 @@
           <button class="btn" id="importJsonBtn" type="button">Импорт JSON</button>
           <button class="btn danger" id="clearMonthBtn" type="button">Очистить месяц</button>
         </div>
-        <p class="notice">Воскресенье отмечается как нерабочий день. Будни: 10:00–17:00, суббота: 10:00–14:00. Записи вне рабочего окна приложение не сохраняет.</p>
+        <p class="notice">Воскресенье — выходной. Будни: 10:00–17:00, суббота: 10:00–14:00. В одну дату можно сохранять любое количество отдельных записей.</p>
+        <div class="month-list" id="monthList"></div>
       </div>
 
       <div class="panel glass">
@@ -257,7 +174,7 @@
           </div>
         </div>
 
-        <form class="form-grid" id="entryForm">
+        <form class="form-grid" id="entryForm" autocomplete="off">
           <div class="field">
             <span>Дата</span>
             <input id="entryDate" type="date" required />
@@ -302,7 +219,7 @@
 
           <div class="field">
             <span>Комментарий</span>
-            <textarea id="comment" maxlength="500" placeholder="Необязательно: детали, место, уточнение по ситуации"></textarea>
+            <textarea id="comment" maxlength="500" placeholder="Необязательно: детали, место, уточнение"></textarea>
           </div>
 
           <button class="btn primary" id="saveBtn" type="submit">Сохранить запись</button>
@@ -354,215 +271,200 @@
       let editingDate = null;
       let modalMode = 'export';
 
-      const $ = (id) => document.getElementById(id);
+      const $ = id => document.getElementById(id);
       const els = {
-        calendar: $('calendar'), monthTitle: $('monthTitle'), selectedDateTitle: $('selectedDateTitle'), worktimeTitle: $('worktimeTitle'),
-        dayTotal: $('dayTotal'), monthTotal: $('monthTotal'), entriesCount: $('entriesCount'), entryForm: $('entryForm'), entryDate: $('entryDate'),
-        startTime: $('startTime'), endTime: $('endTime'), reason: $('reason'), customReasonWrap: $('customReasonWrap'), customReason: $('customReason'),
-        comment: $('comment'), entries: $('entries'), rangeHint: $('rangeHint'), saveBtn: $('saveBtn'), cancelEditBtn: $('cancelEditBtn'),
-        selectedWorkedWindow: $('selectedWorkedWindow'), selectedLostPercent: $('selectedLostPercent'), selectedTopReason: $('selectedTopReason'), toast: $('toast'),
-        dataModal: $('dataModal'), modalTitle: $('modalTitle'), modalText: $('modalText'), modalData: $('modalData'), modalApplyBtn: $('modalApplyBtn'), modalCopyBtn: $('modalCopyBtn')
+        calendar:$('calendar'), monthTitle:$('monthTitle'), selectedDateTitle:$('selectedDateTitle'), worktimeTitle:$('worktimeTitle'),
+        dayTotal:$('dayTotal'), monthTotal:$('monthTotal'), entriesCount:$('entriesCount'), entryForm:$('entryForm'), entryDate:$('entryDate'),
+        startTime:$('startTime'), endTime:$('endTime'), reason:$('reason'), customReasonWrap:$('customReasonWrap'), customReason:$('customReason'),
+        comment:$('comment'), entries:$('entries'), rangeHint:$('rangeHint'), saveBtn:$('saveBtn'), cancelEditBtn:$('cancelEditBtn'),
+        selectedWorkedWindow:$('selectedWorkedWindow'), selectedLostPercent:$('selectedLostPercent'), selectedTopReason:$('selectedTopReason'), monthList:$('monthList'),
+        toast:$('toast'), dataModal:$('dataModal'), modalTitle:$('modalTitle'), modalText:$('modalText'), modalData:$('modalData'), modalApplyBtn:$('modalApplyBtn'), modalCopyBtn:$('modalCopyBtn')
       };
 
+      function normalizeState(raw){
+        const result = { entriesByDate:{} };
+        if(!raw || typeof raw !== 'object' || !raw.entriesByDate || typeof raw.entriesByDate !== 'object') return result;
+        Object.keys(raw.entriesByDate).forEach(date => {
+          const arr = Array.isArray(raw.entriesByDate[date]) ? raw.entriesByDate[date] : [];
+          const clean = arr.map(item => {
+            const start = validTime(item.start) ? item.start : '10:00';
+            const end = validTime(item.end) ? item.end : minToTime(timeToMin(start) + 1);
+            const reason = String(item.reason || '').trim();
+            if(!reason) return null;
+            return {
+              id: String(item.id || uid()),
+              employee: item.employee || EMPLOYEE,
+              date: item.date || date,
+              start,
+              end,
+              reason,
+              comment: String(item.comment || ''),
+              minutes: Math.max(0, Number(item.minutes) || duration(start,end)),
+              createdAt: item.createdAt || new Date().toISOString(),
+              updatedAt: item.updatedAt || undefined
+            };
+          }).filter(Boolean);
+          if(clean.length) result.entriesByDate[date] = clean;
+        });
+        return result;
+      }
+
       function loadState(){
-        try{
-          const parsed = JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}');
-          if(!parsed.entriesByDate || typeof parsed.entriesByDate !== 'object') return { entriesByDate: {} };
-          return parsed;
-        }catch{
-          return { entriesByDate: {} };
-        }
+        try{ return normalizeState(JSON.parse(localStorage.getItem(STORAGE_KEY) || '{}')); }
+        catch{ return { entriesByDate:{} }; }
       }
 
       function saveState(){
+        state = normalizeState(state);
         localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
       }
 
       function toDateKey(date){
         const d = new Date(date);
-        const y = d.getFullYear();
-        const m = String(d.getMonth()+1).padStart(2,'0');
-        const day = String(d.getDate()).padStart(2,'0');
-        return `${y}-${m}-${day}`;
+        return `${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
       }
-
       function parseDateKey(key){
-        const [y,m,d] = key.split('-').map(Number);
-        return new Date(y,m-1,d);
+        const parts = String(key || '').split('-').map(Number);
+        if(parts.length !== 3 || parts.some(Number.isNaN)) return new Date();
+        return new Date(parts[0], parts[1]-1, parts[2]);
       }
-
       function formatDateRu(key){
         const date = parseDateKey(key);
         return `${dayNames[date.getDay()]}, ${date.getDate()} ${monthNames[date.getMonth()].toLowerCase()} ${date.getFullYear()}`;
       }
-
       function getWorkWindow(key){
         const day = parseDateKey(key).getDay();
         if(day === 0) return null;
         if(day === 6) return { start:'10:00', end:'14:00', minutes:240, label:'10:00–14:00' };
         return { start:'10:00', end:'17:00', minutes:420, label:'10:00–17:00' };
       }
-
-      function timeToMin(time){
-        const [h,m] = time.split(':').map(Number);
-        return h * 60 + m;
-      }
-
-      function minToTime(total){
-        const value = ((total % 1440) + 1440) % 1440;
-        const h = Math.floor(value / 60);
-        const m = value % 60;
-        return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
-      }
-
+      function validTime(time){ return /^([01]\d|2[0-3]):[0-5]\d$/.test(String(time || '')); }
+      function timeToMin(time){ const [h,m] = String(time || '00:00').split(':').map(Number); return (h || 0) * 60 + (m || 0); }
+      function minToTime(total){ const value = ((total % 1440) + 1440) % 1440; return `${String(Math.floor(value/60)).padStart(2,'0')}:${String(value%60).padStart(2,'0')}`; }
       function duration(start,end){ return Math.max(0, timeToMin(end) - timeToMin(start)); }
-      function listFor(key){ return state.entriesByDate[key] || []; }
-      function totalFor(key){ return listFor(key).reduce((sum,e) => sum + e.minutes, 0); }
-      function uid(){ return `${Date.now().toString(36)}-${Math.random().toString(36).slice(2,8)}`; }
-
+      function listFor(key){ const arr = state.entriesByDate[key]; return Array.isArray(arr) ? arr : []; }
+      function totalFor(key){ return listFor(key).reduce((sum,e) => sum + (Number(e.minutes) || duration(e.start,e.end)), 0); }
+      function uid(){ return `${Date.now().toString(36)}-${cryptoSafeRandom()}`; }
+      function cryptoSafeRandom(){
+        try{ const a = new Uint32Array(1); crypto.getRandomValues(a); return a[0].toString(36); }
+        catch{ return Math.random().toString(36).slice(2,10); }
+      }
       function niceMinutes(mins){
-        if(!mins) return '0м';
-        const h = Math.floor(mins/60), m = mins%60;
+        const value = Math.max(0, Number(mins) || 0);
+        if(!value) return '0м';
+        const h = Math.floor(value/60), m = value%60;
         if(h && m) return `${h}ч ${m}м`;
         if(h) return `${h}ч`;
         return `${m}м`;
       }
-
-      function escapeHtml(str){
-        return String(str || '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch]));
-      }
-
+      function escapeHtml(str){ return String(str || '').replace(/[&<>'"]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[ch])); }
       function toast(message){
         els.toast.textContent = message;
         els.toast.classList.add('show');
         clearTimeout(toast.timer);
-        toast.timer = setTimeout(() => els.toast.classList.remove('show'), 1800);
+        toast.timer = setTimeout(() => els.toast.classList.remove('show'), 2200);
       }
 
       function renderCalendar(){
         els.calendar.innerHTML = '';
         dowShort.forEach(name => {
-          const div = document.createElement('div');
-          div.className = 'dow';
-          div.textContent = name;
-          els.calendar.appendChild(div);
+          const div = document.createElement('div'); div.className = 'dow'; div.textContent = name; els.calendar.appendChild(div);
         });
-
-        const y = viewDate.getFullYear();
-        const m = viewDate.getMonth();
+        const y = viewDate.getFullYear(), m = viewDate.getMonth();
         els.monthTitle.textContent = `${monthNames[m]} ${y}`;
-
         const first = new Date(y,m,1);
-        const mondayBased = (first.getDay() + 6) % 7;
-        const start = new Date(y,m,1 - mondayBased);
+        const mondayBased = (first.getDay()+6)%7;
+        const start = new Date(y,m,1-mondayBased);
         const todayKey = toDateKey(new Date());
-
         for(let i=0;i<42;i++){
-          const d = new Date(start);
-          d.setDate(start.getDate()+i);
-          const key = toDateKey(d);
-          const work = getWorkWindow(key);
-          const total = totalFor(key);
-          const count = listFor(key).length;
-          const percent = work ? Math.min(100, Math.round(total / work.minutes * 100)) : 0;
-          const button = document.createElement('button');
-          button.type = 'button';
-          button.className = 'day';
-          if(d.getMonth() !== m) button.classList.add('other');
-          if(!work) button.classList.add('off');
-          if(key === selectedDate) button.classList.add('selected');
-          if(key === todayKey) button.classList.add('today');
-          button.innerHTML = `
-            <span class="day-num">${d.getDate()}</span>
-            <span class="day-meta">
-              <span>${count ? `${count} зап. · ${niceMinutes(total)}` : (work ? 'Нет записей' : 'Выходной')}</span>
-              <span class="dotline"><span class="dotfill" style="width:${percent}%"></span></span>
-            </span>`;
-          button.addEventListener('click', () => {
+          const d = new Date(start); d.setDate(start.getDate()+i);
+          const key = toDateKey(d), work = getWorkWindow(key), total = totalFor(key), count = listFor(key).length;
+          const percent = work ? Math.min(100, Math.round(total/work.minutes*100)) : 0;
+          const btn = document.createElement('button');
+          btn.type = 'button'; btn.className = 'day';
+          if(d.getMonth() !== m) btn.classList.add('other');
+          if(!work) btn.classList.add('off');
+          if(key === selectedDate) btn.classList.add('selected');
+          if(key === todayKey) btn.classList.add('today');
+          btn.innerHTML = `<span class="day-num">${d.getDate()}</span><span class="day-meta"><span>${count ? `${count} зап. · ${niceMinutes(total)}` : (work ? 'Нет записей' : 'Выходной')}</span><span class="dotline"><span class="dotfill" style="width:${percent}%"></span></span></span>`;
+          btn.addEventListener('click', () => {
             selectedDate = key;
             els.entryDate.value = key;
             if(!editingId) setDefaultTimesForDate(key);
             renderAll();
           });
-          els.calendar.appendChild(button);
+          els.calendar.appendChild(btn);
         }
       }
 
       function renderSelected(){
         const work = getWorkWindow(selectedDate);
-        const list = [...listFor(selectedDate)].sort((a,b) => a.start.localeCompare(b.start));
+        const list = [...listFor(selectedDate)].sort((a,b) => `${a.start}-${a.end}`.localeCompare(`${b.start}-${b.end}`));
         const total = totalFor(selectedDate);
         const monthTotal = monthTotalFor(viewDate.getFullYear(), viewDate.getMonth());
         els.selectedDateTitle.textContent = formatDateRu(selectedDate);
-        els.worktimeTitle.textContent = work ? `Рабочее время: ${work.label}` : 'Выходной день: записи пропусков отключены';
+        els.worktimeTitle.textContent = work ? `Рабочее время: ${work.label}` : 'Выходной день: записи отключены';
         els.dayTotal.textContent = niceMinutes(total);
         els.monthTotal.textContent = niceMinutes(monthTotal);
         els.entriesCount.textContent = String(list.length);
-        els.rangeHint.textContent = work ? `Рабочее окно: ${work.label}. Точность ввода — 1 минута.` : 'Воскресенье — нерабочий день.';
+        els.rangeHint.textContent = work ? `Рабочее окно: ${work.label}. Можно добавлять несколько записей за один день.` : 'Воскресенье — нерабочий день.';
         els.selectedWorkedWindow.textContent = work ? work.label : 'Выходной';
-        els.selectedLostPercent.textContent = work ? `${Math.min(100, Math.round(total / work.minutes * 100))}%` : '—';
+        els.selectedLostPercent.textContent = work ? `${Math.min(100, Math.round(total/work.minutes*100))}%` : '—';
         els.selectedTopReason.textContent = topReason(list);
 
         if(!list.length){
           els.entries.innerHTML = '<div class="empty">На выбранный день записей пока нет.</div>';
+        }else{
+          els.entries.innerHTML = list.map(e => `<article class="entry"><div class="entry-main"><div class="entry-title">${escapeHtml(e.reason)}</div><div class="entry-meta">${escapeHtml(e.start)}–${escapeHtml(e.end)} · ${niceMinutes(e.minutes)}</div>${e.comment ? `<div class="entry-meta">${escapeHtml(e.comment)}</div>` : ''}</div><div class="entry-actions"><button class="icon-btn" data-edit="${escapeHtml(e.id)}" type="button" title="Редактировать">✎</button><button class="icon-btn" data-delete="${escapeHtml(e.id)}" type="button" title="Удалить">×</button></div></article>`).join('');
+          els.entries.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => startEdit(btn.dataset.edit)));
+          els.entries.querySelectorAll('[data-delete]').forEach(btn => btn.addEventListener('click', () => deleteEntry(btn.dataset.delete)));
+        }
+        renderMonthList();
+      }
+
+      function renderMonthList(){
+        const y = viewDate.getFullYear(), m = viewDate.getMonth();
+        const prefix = `${y}-${String(m+1).padStart(2,'0')}-`;
+        const rows = Object.keys(state.entriesByDate).filter(k => k.startsWith(prefix)).sort().flatMap(date =>
+          [...listFor(date)].sort((a,b) => `${a.start}-${a.end}`.localeCompare(`${b.start}-${b.end}`)).map(e => ({ date, ...e }))
+        );
+        if(!rows.length){
+          els.monthList.innerHTML = '<h3>Все записи месяца</h3><div class="empty">В этом месяце записей пока нет.</div>';
           return;
         }
-
-        els.entries.innerHTML = list.map(e => `
-          <article class="entry">
-            <div class="entry-main">
-              <div class="entry-title">${escapeHtml(e.reason)}</div>
-              <div class="entry-meta">${e.start}–${e.end} · ${niceMinutes(e.minutes)}</div>
-              ${e.comment ? `<div class="entry-meta">${escapeHtml(e.comment)}</div>` : ''}
-            </div>
-            <div class="entry-actions">
-              <button class="icon-btn" data-edit="${e.id}" type="button" title="Редактировать">✎</button>
-              <button class="icon-btn" data-delete="${e.id}" type="button" title="Удалить">×</button>
-            </div>
-          </article>
-        `).join('');
-
-        els.entries.querySelectorAll('[data-edit]').forEach(btn => btn.addEventListener('click', () => startEdit(btn.dataset.edit)));
-        els.entries.querySelectorAll('[data-delete]').forEach(btn => btn.addEventListener('click', () => deleteEntry(btn.dataset.delete)));
+        els.monthList.innerHTML = `<h3>Все записи месяца</h3><div style="overflow:auto"><table class="month-table"><thead><tr><th>Дата</th><th>Время</th><th>Длительность</th><th>Причина</th><th>Комментарий</th></tr></thead><tbody>${rows.map(r => `<tr><td>${escapeHtml(r.date)}</td><td>${escapeHtml(r.start)}–${escapeHtml(r.end)}</td><td>${niceMinutes(r.minutes)}</td><td>${escapeHtml(r.reason)}</td><td>${escapeHtml(r.comment || '')}</td></tr>`).join('')}</tbody></table></div>`;
       }
 
       function topReason(list){
         if(!list.length) return '—';
         const map = new Map();
         list.forEach(e => map.set(e.reason, (map.get(e.reason)||0)+1));
-        return [...map.entries()].sort((a,b) => b[1]-a[1])[0][0].slice(0,20) + ([...map.entries()].sort((a,b) => b[1]-a[1])[0][0].length > 20 ? '…' : '');
+        const top = [...map.entries()].sort((a,b) => b[1]-a[1])[0][0];
+        return top.length > 20 ? `${top.slice(0,20)}…` : top;
       }
-
-      function monthTotalFor(year, month){
+      function monthTotalFor(year,month){
         const prefix = `${year}-${String(month+1).padStart(2,'0')}-`;
-        return Object.keys(state.entriesByDate).filter(k => k.startsWith(prefix)).reduce((sum,k) => sum + totalFor(k), 0);
+        return Object.keys(state.entriesByDate).filter(k => k.startsWith(prefix)).reduce((sum,k) => sum + totalFor(k),0);
       }
-
       function setDefaultTimesForDate(key){
         const work = getWorkWindow(key);
         els.startTime.value = work ? work.start : '10:00';
         els.endTime.value = work ? minToTime(timeToMin(work.start)+15) : '10:15';
       }
-
       function validateEntry(dateKey,start,end,reason){
         const work = getWorkWindow(dateKey);
+        if(!dateKey) return 'Выберите дату.';
+        if(!validTime(start) || !validTime(end)) return 'Укажите корректное время начала и конца.';
         if(!work) return 'Воскресенье отмечен как выходной. Выберите рабочий день.';
-        const startMin = timeToMin(start), endMin = timeToMin(end);
-        const workStart = timeToMin(work.start), workEnd = timeToMin(work.end);
+        const startMin = timeToMin(start), endMin = timeToMin(end), workStart = timeToMin(work.start), workEnd = timeToMin(work.end);
         if(endMin <= startMin) return 'Конец интервала должен быть позже начала.';
         if(startMin < workStart || endMin > workEnd) return `Интервал должен быть внутри рабочего окна ${work.label}.`;
         if(!reason.trim()) return 'Укажите причину.';
         return null;
       }
-
-      function renderAll(){
-        renderCalendar();
-        renderSelected();
-      }
-
+      function renderAll(){ renderCalendar(); renderSelected(); }
       function resetForm(){
-        editingId = null;
-        editingDate = null;
+        editingId = null; editingDate = null;
         els.saveBtn.textContent = 'Сохранить запись';
         els.cancelEditBtn.style.display = 'none';
         els.entryForm.reset();
@@ -573,42 +475,30 @@
         els.customReasonWrap.style.display = 'none';
         setDefaultTimesForDate(selectedDate);
       }
-
       function startEdit(id){
         const entry = listFor(selectedDate).find(e => e.id === id);
         if(!entry) return;
-        editingId = id;
-        editingDate = selectedDate;
+        editingId = id; editingDate = selectedDate;
         els.entryDate.value = selectedDate;
         els.startTime.value = entry.start;
         els.endTime.value = entry.end;
         const preset = [...els.reason.options].some(o => o.value === entry.reason);
-        if(preset){
-          els.reason.value = entry.reason;
-          els.customReasonWrap.style.display = 'none';
-          els.customReason.value = '';
-        }else{
-          els.reason.value = 'Другое';
-          els.customReasonWrap.style.display = 'grid';
-          els.customReason.value = entry.reason;
-        }
+        if(preset){ els.reason.value = entry.reason; els.customReasonWrap.style.display = 'none'; els.customReason.value = ''; }
+        else{ els.reason.value = 'Другое'; els.customReasonWrap.style.display = 'grid'; els.customReason.value = entry.reason; }
         els.comment.value = entry.comment || '';
         els.saveBtn.textContent = 'Сохранить изменения';
         els.cancelEditBtn.style.display = 'block';
         toast('Запись открыта для редактирования');
       }
-
       function deleteEntry(id){
         if(!confirm('Удалить эту запись?')) return;
-        state.entriesByDate[selectedDate] = listFor(selectedDate).filter(e => e.id !== id);
-        if(!state.entriesByDate[selectedDate].length) delete state.entriesByDate[selectedDate];
-        saveState();
-        resetForm();
-        renderAll();
-        toast('Запись удалена');
+        state = loadState();
+        const list = listFor(selectedDate).filter(e => e.id !== id);
+        if(list.length) state.entriesByDate[selectedDate] = list; else delete state.entriesByDate[selectedDate];
+        saveState(); resetForm(); renderAll(); toast('Запись удалена');
       }
 
-      els.entryForm.addEventListener('submit', (event) => {
+      els.entryForm.addEventListener('submit', event => {
         event.preventDefault();
         const dateKey = els.entryDate.value;
         const start = els.startTime.value;
@@ -618,76 +508,66 @@
         const error = validateEntry(dateKey,start,end,reason);
         if(error){ toast(error); return; }
 
-        const entry = { id: editingId || uid(), employee: EMPLOYEE, date: dateKey, start, end, reason, comment, minutes: duration(start,end), createdAt: new Date().toISOString() };
-        state.entriesByDate[dateKey] = state.entriesByDate[dateKey] || [];
-
+        state = loadState();
         const wasEditing = Boolean(editingId);
+        const entry = {
+          id: editingId || uid(), employee: EMPLOYEE, date: dateKey, start, end, reason, comment,
+          minutes: duration(start,end), createdAt: new Date().toISOString()
+        };
+
         if(wasEditing){
           const sourceDate = editingDate || dateKey;
-          state.entriesByDate[sourceDate] = listFor(sourceDate).filter(e => e.id !== editingId);
-          if(!state.entriesByDate[sourceDate].length) delete state.entriesByDate[sourceDate];
-          state.entriesByDate[dateKey] = state.entriesByDate[dateKey] || [];
-          state.entriesByDate[dateKey].push({ ...entry, updatedAt: new Date().toISOString() });
+          const sourceList = listFor(sourceDate).filter(e => e.id !== editingId);
+          if(sourceList.length) state.entriesByDate[sourceDate] = sourceList; else delete state.entriesByDate[sourceDate];
+          if(!Array.isArray(state.entriesByDate[dateKey])) state.entriesByDate[dateKey] = [];
+          state.entriesByDate[dateKey].push({ ...entry, updatedAt:new Date().toISOString() });
         }else{
+          if(!Array.isArray(state.entriesByDate[dateKey])) state.entriesByDate[dateKey] = [];
           state.entriesByDate[dateKey].push(entry);
         }
+
         selectedDate = dateKey;
         viewDate = parseDateKey(dateKey);
         saveState();
         resetForm();
         renderAll();
-        toast(wasEditing ? 'Изменения сохранены' : 'Запись сохранена');
+        toast(wasEditing ? 'Изменения сохранены' : `Запись сохранена. Всего за день: ${listFor(dateKey).length}`);
       });
 
       els.reason.addEventListener('change', () => {
         els.customReasonWrap.style.display = els.reason.value === 'Другое' ? 'grid' : 'none';
         if(els.reason.value === 'Другое') els.customReason.focus();
       });
-
       els.entryDate.addEventListener('change', () => {
         selectedDate = els.entryDate.value || selectedDate;
         viewDate = parseDateKey(selectedDate);
-        setDefaultTimesForDate(selectedDate);
+        if(!editingId) setDefaultTimesForDate(selectedDate);
         renderAll();
       });
-
       document.querySelectorAll('[data-step-target]').forEach(btn => {
         btn.addEventListener('click', () => {
           const input = $(btn.dataset.stepTarget);
-          const next = timeToMin(input.value || '10:00') + Number(btn.dataset.step);
-          input.value = minToTime(next);
+          input.value = minToTime(timeToMin(input.value || '10:00') + Number(btn.dataset.step));
         });
       });
-
       $('prevMonth').addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth()-1); renderAll(); });
       $('nextMonth').addEventListener('click', () => { viewDate.setMonth(viewDate.getMonth()+1); renderAll(); });
       $('todayBtn').addEventListener('click', () => { selectedDate = toDateKey(new Date()); viewDate = new Date(); resetForm(); renderAll(); });
       els.cancelEditBtn.addEventListener('click', () => { resetForm(); toast('Редактирование отменено'); });
 
       function exportRows(){
+        state = loadState();
         return Object.keys(state.entriesByDate).sort().flatMap(date =>
-          state.entriesByDate[date].map(e => ({
-            employee: EMPLOYEE,
-            date,
-            weekday: dayNames[parseDateKey(date).getDay()],
-            start: e.start,
-            end: e.end,
-            minutes: e.minutes,
-            reason: e.reason,
-            comment: e.comment || ''
-          }))
+          listFor(date).map(e => ({ employee:EMPLOYEE, date, weekday:dayNames[parseDateKey(date).getDay()], start:e.start, end:e.end, minutes:e.minutes, reason:e.reason, comment:e.comment || '' }))
         );
       }
-
       function csvEscape(value){ return `"${String(value ?? '').replace(/"/g,'""')}"`; }
-      function download(filename, text, mime){
+      function download(filename,text,mime){
         const blob = new Blob([text], { type:mime });
         const url = URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
+        const a = document.createElement('a'); a.href = url; a.download = filename; document.body.appendChild(a); a.click(); a.remove();
         setTimeout(() => URL.revokeObjectURL(url), 700);
       }
-
       $('exportCsvBtn').addEventListener('click', () => {
         const rows = exportRows();
         const header = ['Сотрудник','Дата','День недели','Начало','Конец','Минуты','Причина','Комментарий'];
@@ -695,25 +575,24 @@
         download(`kalendrik-stukacha-${new Date().toISOString().slice(0,10)}.csv`, '\ufeff' + csv, 'text/csv;charset=utf-8');
         toast('CSV скачан');
       });
-
       $('exportJsonBtn').addEventListener('click', () => openModal('export'));
       $('importJsonBtn').addEventListener('click', () => openModal('import'));
       $('clearMonthBtn').addEventListener('click', () => {
-        const y = viewDate.getFullYear();
-        const m = viewDate.getMonth();
+        const y = viewDate.getFullYear(), m = viewDate.getMonth();
         const prefix = `${y}-${String(m+1).padStart(2,'0')}-`;
         if(!confirm(`Очистить все записи за ${monthNames[m].toLowerCase()} ${y}?`)) return;
+        state = loadState();
         Object.keys(state.entriesByDate).forEach(k => { if(k.startsWith(prefix)) delete state.entriesByDate[k]; });
         saveState(); resetForm(); renderAll(); toast('Месяц очищен');
       });
-
       function openModal(mode){
         modalMode = mode;
         els.dataModal.classList.add('show');
         if(mode === 'export'){
+          state = loadState();
           els.modalTitle.textContent = 'Экспорт JSON';
           els.modalText.textContent = 'Можно сохранить резервную копию или перенести данные в другой браузер.';
-          els.modalData.value = JSON.stringify({ app:'Календарик стукача', version:1, employee:EMPLOYEE, exportedAt:new Date().toISOString(), entriesByDate:state.entriesByDate }, null, 2);
+          els.modalData.value = JSON.stringify({ app:'Календарик стукача', version:2, employee:EMPLOYEE, exportedAt:new Date().toISOString(), entriesByDate:state.entriesByDate }, null, 2);
           els.modalApplyBtn.style.display = 'none';
         }else{
           els.modalTitle.textContent = 'Импорт JSON';
@@ -723,10 +602,9 @@
         }
         els.modalData.focus();
       }
-
       function closeModal(){ els.dataModal.classList.remove('show'); }
       $('modalCloseBtn').addEventListener('click', closeModal);
-      els.dataModal.addEventListener('click', (event) => { if(event.target === els.dataModal) closeModal(); });
+      els.dataModal.addEventListener('click', event => { if(event.target === els.dataModal) closeModal(); });
       els.modalCopyBtn.addEventListener('click', async () => {
         try{ await navigator.clipboard.writeText(els.modalData.value); toast('Скопировано'); }
         catch{ els.modalData.select(); document.execCommand('copy'); toast('Скопировано'); }
@@ -735,17 +613,11 @@
         try{
           const parsed = JSON.parse(els.modalData.value);
           if(!parsed.entriesByDate || typeof parsed.entriesByDate !== 'object') throw new Error('bad json');
-          state = { entriesByDate: parsed.entriesByDate };
+          state = normalizeState({ entriesByDate: parsed.entriesByDate });
           saveState(); closeModal(); resetForm(); renderAll(); toast('JSON импортирован');
-        }catch{
-          toast('Не удалось импортировать JSON');
-        }
+        }catch{ toast('Не удалось импортировать JSON'); }
       });
-
-      document.querySelectorAll('[data-theme]').forEach(btn => {
-        btn.addEventListener('click', () => setTheme(btn.dataset.theme));
-      });
-
+      document.querySelectorAll('[data-theme]').forEach(btn => btn.addEventListener('click', () => setTheme(btn.dataset.theme)));
       function setTheme(theme){
         document.body.classList.remove('light','office');
         if(theme === 'light') document.body.classList.add('light');
@@ -754,6 +626,7 @@
       }
 
       setTheme(localStorage.getItem(THEME_KEY) || 'dark');
+      saveState();
       resetForm();
       renderAll();
     })();
